@@ -166,9 +166,12 @@ class CCXTFeed(with_metaclass(MetaCCXTFeed, DataBase)):
                     print('Index Error: Data = {}'.format(data))
                 print('---- REQUEST END ----')
             else:
-
-                data = sorted(self.store.fetch_ohlcv(self.p.dataname, timeframe=granularity,
+                try:
+                    data = sorted(self.store.fetch_ohlcv(self.p.dataname, timeframe=granularity,
                                                      since=since, limit=limit, params=self.p.fetch_ohlcv_params))
+                except TypeError as e:
+                    print(f"Data Returned with {e}")
+                    continue
 
             # Check to see if dropping the latest candle will help with
             # exchanges which return partial data
